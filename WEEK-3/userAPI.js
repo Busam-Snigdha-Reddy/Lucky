@@ -1,11 +1,17 @@
 import exp from'express'
-import {UserModel} from '../BACKEND-DEMO2/models/userModel.js'
+import {UserModel} from '../WEEK-3/models/userModel.js'
+import {hash,compare} from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 export const userApp=exp.Router()
 
 //USER API ROUTES
 //POST ROUTE
 userApp.post('/users',async(req,res)=>{
     let newUser = req.body;
+    //hash the password
+    let hashedPassword = await hash(newUser.password,12)
+    //Replace plain password with hashed password
+    newUser.password = hashedPassword;
     //create new user document
     let newUserDoc = new UserModel(newUser)
     //save in db
@@ -13,6 +19,35 @@ userApp.post('/users',async(req,res)=>{
     //send response
     res.status(201).json({message:"user created"})
 })
+
+
+//User Authentication(login) route
+userApp.post('/auth',async(req,res)=>{
+    //get user cred obj
+    let userCred=req.body;
+    //check for username
+    let userOfDB =await UserModel.findOne({username:userCred.username})
+    //if user not found
+    if(userOfDB===null){
+        return res.status(404).json({message:"Invalid username"})
+    }
+    else{
+    //compare passwords
+    let status =  compare(userCred.password, userOfDB.password) //await not working here --issue 
+    //if passwords are matched
+    if(status === false){
+        return res.status(404).json({message:"Invalid Password"})
+    }
+}
+    //create signed token
+    //Once the user credentials are verified then the login route creates a JWT (Json web Token) Token
+    let signedToken = jwt.sign({username:userCred.username},'abcdef',{expiresIn:30})
+    //sav ethe token as HTTP only cookie
+    res.cookie('token',signedToken,{httpOnly:true,secure:false,sameSite:"lax"})
+    //send token in response
+    res.status(200).json({message:"login success"})
+})
+
 
 //GET ROUTE
 userApp.get('/users',async (req,res)=>{

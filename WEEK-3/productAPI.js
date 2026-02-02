@@ -1,5 +1,5 @@
 import exp from'express'
-import {ProductModel} from '../BACKEND-DEMO2/models/productModel.js'
+import {ProductModel} from '../WEEK-3/models/productModel.js'
 export const productApp=exp.Router()
 
 //product api routes
