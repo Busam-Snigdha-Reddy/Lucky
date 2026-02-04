@@ -2,6 +2,23 @@ import exp from'express'
 import {UserModel} from '../WEEK-3/models/userModel.js'
 import {hash,compare} from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import {verifyToken} from '../WEEK-3/middlewares/verifyToken.js'
+//USER API ROUTES
+//POST ROUTE
+userApp.post('/users',async(req,res)=>{
+    let newUser = req.body;
+    //hash the password
+    let hashedPassword = await hash(newUser.password,12)
+    //Replace plain password with hashed password
+    newUser.password = hashedPassword;
+    //create new user document
+    let newUserDoc = new UserModel(newUser)
+    //save in db
+    await newUserDoc.save()
+    //send response
+    res.status(201).json({message:"user created"})
+})
+import {verifyToken} from '../WEEK-3/middlewares/verifyToken.js'
 export const userApp=exp.Router()
 
 //USER API ROUTES
@@ -33,7 +50,7 @@ userApp.post('/auth',async(req,res)=>{
     }
     else{
     //compare passwords
-    let status =  compare(userCred.password, userOfDB.password) //await not working here --issue 
+    let status = compare(userCred.password, userOfDB.password) //await not working here --issue 
     //if passwords are matched
     if(status === false){
         return res.status(404).json({message:"Invalid Password"})
@@ -87,5 +104,11 @@ userApp.delete('/users/:id',async(req,res)=>
     let objId = req.params.id;
     let deletedUser = await UserModel.findByIdAndDelete(objId)
     res.status(200).json({message:"user removed",payload:deletedUser})
+
+})
+
+//test route
+userApp.get('/test',verifyToken, (req,res)=>{
+    res.json({message:"test route"})
 
 })
