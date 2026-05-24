@@ -1,4 +1,4 @@
-# Lucky - MERN Stack Application
+# MERN Stack Application
 
 A comprehensive REST API built with the MERN stack (MongoDB, Express.js, React, Node.js) for managing users and products with authentication.
 
