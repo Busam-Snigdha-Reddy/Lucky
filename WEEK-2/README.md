@@ -1,6 +1,6 @@
 # WEEK-2: Advanced JavaScript Concepts
 
-Welcome to Week 2 of the MERN stack learning journey! This week covers essential JavaScript concepts for modern web development.
+This week covers essential JavaScript concepts for modern web development.
 
 ## Topics Covered
 
@@ -106,9 +106,9 @@ WEEK-2/
 
 ## Key Takeaways
 
-✅ Master the spread operator for object/array manipulation  
-✅ Handle errors gracefully with try-catch blocks  
-✅ Use Fetch API and async/await for asynchronous operations  
-✅ Write defensive code with optional chaining  
+Master the spread operator for object/array manipulation  
+Handle errors gracefully with try-catch blocks  
+Use Fetch API and async/await for asynchronous operations  
+Write defensive code with optional chaining  
 
 
